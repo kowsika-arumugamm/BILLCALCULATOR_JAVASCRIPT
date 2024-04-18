@@ -1,0 +1,122 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bill Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("financial.png");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    #bill-form,
+    #bill-table,
+    #total-bill-amount {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #bill-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    #bill-form input {
+      width: 300px;
+      margin-bottom: 10px;
+    }
+
+    #bill-table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+    }
+
+    #bill-table th,
+    #bill-table td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    #bill-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Grocery Bill Calculator</h1>
+  <div id="bill-form">
+    <label for="item-name">Item Name:</label>
+    <input type="text" id="item-name" name="item-name">
+    <label for="item-quantity">Quantity:</label>
+    <input type="number" id="item-quantity" name="item-quantity">
+    <label for="item-price">Price per Unit:</label>
+    <input type="number" id="item-price" name="item-price">
+    <button type="button" onclick="addItem()" required>Add Item</button>
+  </div>
+
+  <h2>Bill Summary:</h2>
+  <table id="bill-table">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Price per Unit(₹)</th>
+        <th>Total Amount</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <br>
+  <p>Total Bill Amount: ₹<span id="total-bill-amount">0.00</span></p>
+
+  <script>
+    var totalBillAmount = 0;
+
+    function addItem() {
+        var itemName = document.getElementById("item-name").value;
+        var itemQuantity = parseFloat(document.getElementById("item-quantity").value);
+        var itemPrice = parseFloat(document.getElementById("item-price").value);
+        var itemTotalAmount = itemQuantity * itemPrice;
+        totalBillAmount += itemTotalAmount;
+
+        var row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${itemName}</td>
+            <td>${itemQuantity}</td>
+            <td>₹${itemPrice.toFixed(2)}</td>
+            <td>₹${itemTotalAmount.toFixed(2)}</td>
+            <td><button type="button" onclick="removeItem(this)">Remove</button></td>
+        `;
+        document.getElementById("bill-table").getElementsByTagName("tbody")[0].appendChild(row);
+        document.getElementById("total-bill-amount").textContent = totalBillAmount.toFixed(2);
+        document.getElementById("item-name").value = "";
+        document.getElementById("item-quantity").value = "";
+        document.getElementById("item-price").value = "";
+    }
+
+    function removeItem(button) {
+        var row = button.parentNode.parentNode;
+        var itemTotalAmount = parseFloat(row.getElementsByTagName("td")[3].textContent.slice(1)); // Remove '₹' before parsing
+        totalBillAmount -= itemTotalAmount;
+        row.parentNode.removeChild(row);
+        document.getElementById("total-bill-amount").textContent = totalBillAmount.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
