@@ -1,1 +1,1 @@
- A simple bill calculator using javascript
+ A simple bill calculator using javascript.
